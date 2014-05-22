@@ -35,12 +35,8 @@
         record2[i++] = document.forms[0].elements['birthdate2'].value;
         record2[i++] = document.forms[0].elements['gender2'].value;
 
-
-        //here....
-
-
-        var b1 = new RecordLinkage(500, 15, 2, 'secret');
-        var b2 = new RecordLinkage(500, 15, 2, 'secret');
+        var b1 = new RecordLinkage(1000, 10, 2, 'secret');
+        var b2 = new RecordLinkage(1000, 10, 2, 'secret');
 
         for(var k=0; k < secrets.length; k++) {
             b1.add(record1[k],secrets[k],ngramms[k],10);
