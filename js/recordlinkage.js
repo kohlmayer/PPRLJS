@@ -62,8 +62,8 @@
     };
 
     RecordLinkage.prototype.normalize = function (value) {
-        // .replace(/\s+/g, ''); removes all whitespaces
-        return value.toUpperCase().trim().replace(/\s+/g, '');
+       // Uppercase, replace some non-alphanumeric characters and all whitespaces
+        return value.toUpperCase().replace(/[-'`~!@#$%^&*()_|+=?;:'",.<>\{\}\[\]\\\/\s]/g, '');
     };
 
     RecordLinkage.prototype.dice = function (bloomFilter) {
