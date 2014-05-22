@@ -34,25 +34,52 @@
         this.buckets = o.buckets;
     };
 
-    RecordLinkage.prototype.locations = function (value) {
-        var ngrams = this.ngrams(value);
+    RecordLinkage.prototype.locations = function (value, key, ngramSize, numHashes) {
+        var ngrams = this.ngrams(value, ngramSize);
         var locations = [];
         for (var i = 0; i < ngrams.length; i++) {
-            var h = this.hashes(ngrams[i]);
+            var h = this.hashes(ngrams[i], key, numHashes);
             locations = locations.concat(h);
         }
         return locations;
     };
 
-    RecordLinkage.prototype.add = function (value) {
-        var l = this.locations(this.normalize(value));
+    RecordLinkage.prototype.add = function (value, key, ngramSize, numHashes) {
+        var localKey;
+        if (typeof key !== "undefined") {
+            localKey = key;
+        } else {
+            localKey = this.key;
+        }
+
+        var localngram;
+        if (typeof ngramSize !== "undefined") {
+            localngram = ngramSize;
+        } else {
+            localngram = this.ngramSize;
+        }
+
+        var localnumHashes;
+        if (typeof numHashes !== "undefined") {
+            localnumHashes = numHashes;
+        } else {
+            localnumHashes = this.numHashes;
+        }
+
+        var l = this.locations(this.normalize(value), localKey, localngram, localnumHashes);
         for (var i = 0; i < l.length; i++) {
             this.buckets[l[i] % this.bitLength] = 1;
         }
     };
 
     RecordLinkage.prototype.test = function (value) {
-        var l = this.locations(this.normalize(value));
+        var localKey;
+        if (typeof key !== "undefined") {
+            localKey = key;
+        } else {
+            localKey = this.key;
+        }
+        var l = this.locations(this.normalize(value), localKey);
         for (var i = 0; i < l.length; i++) {
             if (this.buckets[l[i] % this.bitLength] === 0) {
                 return false;
@@ -62,7 +89,7 @@
     };
 
     RecordLinkage.prototype.normalize = function (value) {
-       // Uppercase, replace some non-alphanumeric characters and all whitespaces
+        // Uppercase, replace some non-alphanumeric characters and all whitespaces
         return value.toUpperCase().replace(/[-'`~!@#$%^&*()_|+=?;:'",.<>\{\}\[\]\\\/\s]/g, '');
     };
 
@@ -84,19 +111,19 @@
         return 2 * common / (thisBloom + otherBloom);
     };
 
-    RecordLinkage.prototype.hashes = function (value) {
+    RecordLinkage.prototype.hashes = function (value, key, numHashes) {
         var hashes = [];
         var counter = 0;
         var i = 0;
 
         var hmac = forge.hmac.create();
-        hmac.start('sha1', this.key);
+        hmac.start('sha1', key);
 
-        while (i < this.numHashes) {
+        while (i < numHashes) {
             hmac.update(counter + value + counter);
             var digestValue = hmac.digest();
             counter++;
-            while (digestValue.length() > 0 && i < this.numHashes) {
+            while (digestValue.length() > 0 && i < numHashes) {
                 var intValue = digestValue.getInt32();
                 hashes.push(intValue);
                 i++;
@@ -119,9 +146,9 @@
         return JSON.stringify(this);
     };
 
-    RecordLinkage.prototype.ngrams = function (value) {
+    RecordLinkage.prototype.ngrams = function (value, ngramSize) {
         var ngramValues = [];
-        var n = this.ngramSize;
+        var n = ngramSize;
         for (var i = 0; i < n - 1; i++) {
             value = '_' + value + '_';
         }

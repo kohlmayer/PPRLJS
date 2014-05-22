@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>test</title>
+    <script src="js/lib/forge.min.js" type="text/javascript"></script>
+    <script src="js/recordlinkage.js" type="text/javascript"></script>
+    <script src="js/example2.js" type="text/javascript"></script>
+</head>
+<body>
+
+
+<form action="#">
+    Secrets:<br>
+    <label for="sf">Firstname:</label><input id="sf" name="secretf" type="text"><br>
+    <label for="sl">Lastname:</label><input id="sl" name="secretl" type="text"><br>
+    <label for="sb">Birthdate:</label><input id="sb" name="secretb" type="text"><br>
+    <label for="sg">Gender:</label><input id="sg" name="secretg" type="text"><br>
+    <hr>
+    Record 1:<br>
+    <label for="f1">Firstname:</label><input id="f1" name="firstname1" type="text"><br>
+    <label for="l1">Lastname:</label><input id="l1" name="lastname1" type="text"><br>
+    <label for="b1">Birthdate:</label><input id="b1" name="birthdate1" type="datetime"><br>
+    Gender:
+    <label for="g1m">male</label><input id="g1m" type="radio" name="gender1" value="0">
+    <label for="g1f">female</label><input id="g1f" type="radio" name="gender1" value="1">
+    <label for="g1k">n/a</label><input id="g1k" type="radio" name="gender1" value="2">
+    <hr>
+    Record 2:<br>
+    <label for="f2">Firstname:</label><input id="f2" name="firstname2" type="text"><br>
+    <label for="l2">Lastname:</label><input id="l2" name="lastname2" type="text"><br>
+    <label for="b2">Birthdate:</label><input id="b2" name="birthdate2" type="datetime"><br>
+    Gender:
+    <label for="g2m">male</label><input id="g2m" type="radio" name="gender2" value="0">
+    <label for="g2f">female</label><input id="g2f" type="radio" name="gender2" value="1">
+    <label for="g2k">n/a</label><input id="g2k" type="radio" name="gender2" value="2">
+    <hr>
+
+    <input type="button" value="compare" onclick="example2();"><br>
+    <label for="dice">Dice value:</label><input id="dice" name="dice" type="text"><br>
+</form>
+
+</body>
+</html>
